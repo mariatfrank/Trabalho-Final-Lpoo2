@@ -85,11 +85,9 @@ public class TipoPizzaDAO {
             e.printStackTrace();
         }
 
-        // Retorna padrão se não encontrar
         return new TipoPizza(0.05, 0.08, 0.12);
     }
 
-    // Atualiza os preços atuais (única linha da tabela)
     public void atualizar(TipoPizza tipoPizza) {
         final String sql = "UPDATE tipo_pizza SET preco_simples = ?, preco_especial = ?, preco_premium = ? WHERE id = ?";
 
@@ -108,28 +106,5 @@ public class TipoPizzaDAO {
         }
     }
 
-    // Lista todos os registros (atualmente apenas um)
-    public List<TipoPizza> listarTodos() {
-        List<TipoPizza> lista = new ArrayList<>();
-        final String sql = "SELECT * FROM tipo_pizza";
 
-        try (Connection conn = Conexao.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(new TipoPizza(
-                        rs.getDouble("preco_simples"),
-                        rs.getDouble("preco_especial"),
-                        rs.getDouble("preco_premium")
-                ));
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Erro ao listar registros da tabela tipo_pizza:");
-            e.printStackTrace();
-        }
-
-        return lista;
-    }
 }

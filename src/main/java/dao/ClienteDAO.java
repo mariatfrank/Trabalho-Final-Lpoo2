@@ -91,15 +91,6 @@ public class ClienteDAO {
         return lista;
     }
 
-    public Cliente buscarPorTelefone(String telefone) {
-        String telefoneLimpo = telefone.replaceAll("[^\\d]", "");
-        List<Cliente> todos = listarTodos();
-
-        return todos.stream()
-                .filter(c -> c.getTelefone().replaceAll("[^\\d]", "").equals(telefoneLimpo))
-                .findFirst()
-                .orElse(null);
-    }
 
     public List<Cliente> buscarTodosPorTelefone(String telefone) {
         String telefoneLimpo = telefone.replaceAll("[^\\d]", "");

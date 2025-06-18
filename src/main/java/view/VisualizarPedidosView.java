@@ -21,13 +21,12 @@ public class VisualizarPedidosView extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Tabela e modelo
         modeloTabela = new DefaultTableModel(new String[]{
                 "ID Pedido", "ID Pizza", "Cliente", "Telefone", "Forma", "Sabores", "Preço", "Estado"
         }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 7; // Apenas a coluna "Estado" é editável
+                return column == 7;
             }
         };
 
@@ -35,12 +34,10 @@ public class VisualizarPedidosView extends JFrame {
         JScrollPane scroll = new JScrollPane(tabela);
         add(scroll, BorderLayout.CENTER);
 
-        // Dropdown na coluna Estado
         String[] estados = {"Pedido Realizado", "A Caminho", "Entregue"};
         JComboBox<String> comboEstado = new JComboBox<>(estados);
         tabela.getColumnModel().getColumn(7).setCellEditor(new DefaultCellEditor(comboEstado));
 
-        // Painel de botões
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnCancelar = new JButton("Cancelar");
         btnSalvar = new JButton("Salvar e Fechar");
@@ -49,11 +46,9 @@ public class VisualizarPedidosView extends JFrame {
         painelBotoes.add(btnSalvar);
         add(painelBotoes, BorderLayout.SOUTH);
 
-        // Controller
         controller = new VisualizarPedidosController(this);
         controller.carregarPedidos();
 
-        // Ações dos botões
         btnSalvar.addActionListener(e -> {
             controller.salvarAlteracoes();
             dispose();

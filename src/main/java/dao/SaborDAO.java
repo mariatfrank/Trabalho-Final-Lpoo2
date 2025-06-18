@@ -7,24 +7,22 @@ import java.util.List;
 
 public class SaborDAO {
 
-        public boolean inserir(Sabor sabor) {
-            String sql = "INSERT INTO sabor (nome, tipo) VALUES (?, ?)";
+    public boolean inserir(Sabor sabor) {
+        String sql = "INSERT INTO sabor (nome, tipo) VALUES (?, ?)";
 
-            try (Connection conn = Conexao.getConexao();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = Conexao.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-                stmt.setString(1, sabor.getNome());
-                stmt.setString(2, sabor.getTipo());
-                stmt.executeUpdate();
-                return true;
+            stmt.setString(1, sabor.getNome());
+            stmt.setString(2, sabor.getTipo());
+            stmt.executeUpdate();
+            return true;
 
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
-
-
+    }
 
 
     public void atualizar(Sabor sabor) {
@@ -43,19 +41,6 @@ public class SaborDAO {
         }
     }
 
-    public void excluir(int id) {
-        String sql = "DELETE FROM sabor WHERE id = ?";
-
-        try (Connection conn = Conexao.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public List<Sabor> listarTodos() {
         List<Sabor> lista = new ArrayList<>();
@@ -81,27 +66,4 @@ public class SaborDAO {
         return lista;
     }
 
-    public Sabor buscarPorId(int id) {
-        String sql = "SELECT * FROM sabor WHERE id = ?";
-
-        try (Connection conn = Conexao.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Sabor(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("tipo")
-                );
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
 }

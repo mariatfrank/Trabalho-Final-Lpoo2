@@ -23,14 +23,12 @@ public class AdicionarPizzaController {
     private double precoEspecial;
     private double precoPremium;
 
-    private Pizza pizzaEditando;
 
     public AdicionarPizzaController(AdicionarPizzaDialog view, double precoSimples, double precoEspecial, double precoPremium, Pizza pizzaEditando) {
         this.view = view;
         this.precoSimples = precoSimples;
         this.precoEspecial = precoEspecial;
         this.precoPremium = precoPremium;
-        this.pizzaEditando = pizzaEditando;
         carregarSabores();
         if (pizzaEditando != null) preencherCamposEdicao(pizzaEditando);
     }

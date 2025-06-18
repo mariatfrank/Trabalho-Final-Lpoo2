@@ -24,7 +24,5 @@ public class PedidoFormView extends JDialog {
         JOptionPane.showMessageDialog(this, message);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new PedidoFormView(null, null).setVisible(true));
-    }
+
 }

@@ -30,7 +30,6 @@ public class CadastrarSaborView extends JFrame {
         txtNome = new JTextField();
         panel.add(txtNome);
 
-        // Impede números no nome
         txtNome.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {

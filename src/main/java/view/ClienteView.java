@@ -2,13 +2,11 @@
 package view;
 
 import controller.ClienteController;
-import model.Cliente;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.List;
 
 public class ClienteView extends JDialog {
     private ClienteController controller;
@@ -38,7 +36,7 @@ public class ClienteView extends JDialog {
         super(parent, "Cadastro de Clientes", true);
         this.controller = new ClienteController(this);
 
-        inicializarComponentes();
+        initComponents();
         controller.configurarEventos();
         controller.carregarClientes();
 
@@ -47,7 +45,7 @@ public class ClienteView extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    private void inicializarComponentes() {
+    private void initComponents() {
         getContentPane().setBackground(fundoJanela);
         setLayout(new BorderLayout());
 

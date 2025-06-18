@@ -25,10 +25,10 @@ public class ClienteFormDialog extends JDialog {
         this.cliente = clienteExistente != null ? clienteExistente : new Cliente();
         this.controller = new ClienteFormController(this.cliente);
 
-        inicializarComponentes();
+        initComponents();
     }
 
-    private void inicializarComponentes() {
+    private void initComponents() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
