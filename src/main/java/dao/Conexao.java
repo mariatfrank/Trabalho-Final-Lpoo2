@@ -5,7 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexao {
-    private static final String URL = "jdbc:sqlite:/Users/mariafrank/Downloads/ufpr/lpoo/lpoo2/PizzariaApp/src/main/database/DBPizzaria.db";
+    private static final String URL;
+
+    static {
+        String currentDir = System.getProperty("user.dir");
+        String relativePath = "/src/main/database/DBPizzaria.db";
+        URL = "jdbc:sqlite:" + currentDir + relativePath;
+    }
 
     public static Connection getConexao() {
         try {
