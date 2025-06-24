@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AdicionarPizzaDialog extends JDialog {
-
     private JComboBox<String> comboForma;
     private JTextField campoDimensao;
     private JTextField campoArea;
@@ -18,7 +17,6 @@ public class AdicionarPizzaDialog extends JDialog {
     private JButton btnConfirmar;
 
     private Pizza pizzaCriada;
-
     private AdicionarPizzaController controller;
 
     public AdicionarPizzaDialog(PedidoFormView parent, double precoSimples, double precoEspecial, double precoPremium) {
@@ -27,28 +25,25 @@ public class AdicionarPizzaDialog extends JDialog {
 
     public AdicionarPizzaDialog(PedidoFormView parent, Pizza pizzaExistente, double precoSimples, double precoEspecial, double precoPremium) {
         super(parent, "Adicionar/Editar Pizza", true);
-        setSize(400, 430);
+        setSize(400, 450);
         setLocationRelativeTo(parent);
-
         initComponents();
-        controller = new AdicionarPizzaController(this, precoSimples, precoEspecial, precoPremium, pizzaExistente); // instancia o controller
+        controller = new AdicionarPizzaController(this, precoSimples, precoEspecial, precoPremium, pizzaExistente);
         registrarEventos();
     }
 
     private void initComponents() {
-        JPanel painel = new JPanel(new GridLayout(9, 2, 10, 10));
+        JPanel painel = new JPanel(new GridLayout(10, 2, 10, 10));
 
         comboForma = new JComboBox<>(new String[]{"Circulo", "Quadrado", "Triangulo"});
         campoDimensao = new JTextField();
         campoArea = new JTextField();
-        campoArea.setEditable(false);
         comboSabor1 = new JComboBox<>();
         comboSabor2 = new JComboBox<>();
+        campoArea.setEditable(true);
 
-        lblPrecoPizza = new JLabel("Preço: R$ 0.00");
-        lblPrecoPizza.setHorizontalAlignment(SwingConstants.CENTER);
+        lblPrecoPizza = new JLabel("Preço: R$ 0.00", SwingConstants.CENTER);
         lblPrecoPizza.setFont(new Font("Arial", Font.BOLD, 14));
-
         btnConfirmar = new JButton("Confirmar");
 
         painel.add(new JLabel("Forma:"));
@@ -74,13 +69,18 @@ public class AdicionarPizzaDialog extends JDialog {
 
         campoDimensao.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent e) {
-                controller.calcularPrecoAutomatico();
+                controller.calcularAreaPorDimensao();
+            }
+        });
+
+        campoArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                controller.calcularDimensaoPorArea();
             }
         });
 
         btnConfirmar.addActionListener(e -> controller.confirmarPizza());
     }
-
     public JComboBox<String> getComboForma() {
         return comboForma;
     }

@@ -17,12 +17,10 @@ public class AdicionarPizzaController {
 
     private AdicionarPizzaDialog view;
     private SaborDAO saborDAO = new SaborDAO();
-    private TipoPizzaDAO tipoPizzaDAO = new TipoPizzaDAO();
 
     private double precoSimples;
     private double precoEspecial;
     private double precoPremium;
-
 
     public AdicionarPizzaController(AdicionarPizzaDialog view, double precoSimples, double precoEspecial, double precoPremium, Pizza pizzaEditando) {
         this.view = view;
@@ -44,51 +42,68 @@ public class AdicionarPizzaController {
         }
     }
 
-    private void preencherCamposEdicao(Pizza pizza) {
-        String tipoForma = pizza.getForma().getClass().getSimpleName().toLowerCase();
-        view.getComboForma().setSelectedItem(Character.toUpperCase(tipoForma.charAt(0)) + tipoForma.substring(1));
-        view.getCampoDimensao().setText(String.valueOf(pizza.getForma().getDimensao()));
-        view.getCampoArea().setText(String.format("%.2f", pizza.getForma().calcularArea()));
-        view.getLblPrecoPizza().setText(String.format("Preço: R$ %.2f", pizza.getPreco()));
+    public void calcularAreaPorDimensao() {
+        try {
+            String forma = (String) view.getComboForma().getSelectedItem();
+            String textoDim = view.getCampoDimensao().getText().trim();
+            if (textoDim.isEmpty()) return;
 
-        List<Sabor> sabores = pizza.getSabores();
-        if (!sabores.isEmpty()) view.getComboSabor1().setSelectedItem(sabores.get(0));
-        if (sabores.size() > 1) view.getComboSabor2().setSelectedItem(sabores.get(1));
+            double valor = Double.parseDouble(textoDim);
+            double area = calcularArea(forma, valor);
+            view.getCampoArea().setText(String.format("%.2f", area));
+            calcularPrecoAutomatico();
+        } catch (Exception e) {
+            view.getCampoArea().setText("");
+            view.getLblPrecoPizza().setText("Preço: R$ 0.00");
+        }
+    }
+
+    public void calcularDimensaoPorArea() {
+        try {
+            String forma = (String) view.getComboForma().getSelectedItem();
+            String textoArea = view.getCampoArea().getText().trim();
+            if (textoArea.isEmpty()) return;
+
+            double area = Double.parseDouble(textoArea);
+            double valor = calcularDimensao(forma, area);
+            view.getCampoDimensao().setText(String.format("%.2f", valor));
+            calcularPrecoAutomatico();
+        } catch (Exception e) {
+            view.getCampoDimensao().setText("");
+            view.getLblPrecoPizza().setText("Preço: R$ 0.00");
+        }
+    }
+
+    private double calcularArea(String forma, double valor) throws Exception {
+        return switch (forma) {
+            case "Circulo" -> {
+                if (valor < 7 || valor > 23) throw new Exception("Raio fora do intervalo (7-23 cm)");
+                yield Math.PI * valor * valor;
+            }
+            case "Quadrado" -> {
+                if (valor < 10 || valor > 40) throw new Exception("Lado fora do intervalo (10-40 cm)");
+                yield valor * valor;
+            }
+            case "Triangulo" -> {
+                if (valor < 20 || valor > 60) throw new Exception("Lado fora do intervalo (20-60 cm)");
+                yield (Math.sqrt(3) / 4) * valor * valor;
+            }
+            default -> throw new Exception("Forma inválida.");
+        };
+    }
+
+    private double calcularDimensao(String forma, double area) throws Exception {
+        return switch (forma) {
+            case "Circulo" -> Math.sqrt(area / Math.PI);
+            case "Quadrado" -> Math.sqrt(area);
+            case "Triangulo" -> Math.sqrt(area * 4 / Math.sqrt(3));
+            default -> throw new Exception("Forma inválida.");
+        };
     }
 
     public void calcularPrecoAutomatico() {
         try {
-            String forma = (String) view.getComboForma().getSelectedItem();
-            String textoDimensao = view.getCampoDimensao().getText().trim();
-
-            if (textoDimensao.isEmpty()) {
-                view.getCampoArea().setText("");
-                view.getLblPrecoPizza().setText("Preço: R$ 0.00");
-                return;
-            }
-
-            double valor = Double.parseDouble(textoDimensao);
-
-            double area = switch (forma) {
-                case "Circulo" -> {
-                    if (valor < 7 || valor > 23) throw new Exception("Raio fora do intervalo (7-23 cm)");
-                    yield Math.PI * valor * valor;
-                }
-                case "Quadrado" -> {
-                    if (valor < 10 || valor > 40) throw new Exception("Lado fora do intervalo (10-40 cm)");
-                    yield valor * valor;
-                }
-                case "Triangulo" -> {
-                    if (valor < 20 || valor > 60) throw new Exception("Lado fora do intervalo (20-60 cm)");
-                    yield (Math.sqrt(3) / 4) * valor * valor;
-                }
-                default -> throw new Exception("Forma inválida.");
-            };
-
-            if (area < 100 || area > 1600) throw new Exception("Área fora do intervalo permitido (100 - 1600 cm²)");
-
-            view.getCampoArea().setText(String.format("%.2f", area));
-
+            double area = Double.parseDouble(view.getCampoArea().getText());
             Sabor sabor1 = (Sabor) view.getComboSabor1().getSelectedItem();
             Sabor sabor2 = (Sabor) view.getComboSabor2().getSelectedItem();
             if (sabor1 != null && sabor2 != null) {
@@ -98,8 +113,7 @@ public class AdicionarPizzaController {
                 double precoFinal = precoMedio * area;
                 view.getLblPrecoPizza().setText(String.format("Preço: R$ %.2f", precoFinal));
             }
-        } catch (Exception ex) {
-            view.getCampoArea().setText("");
+        } catch (Exception e) {
             view.getLblPrecoPizza().setText("Preço: R$ 0.00");
         }
     }
@@ -108,12 +122,13 @@ public class AdicionarPizzaController {
         try {
             String forma = (String) view.getComboForma().getSelectedItem();
             double valor = Double.parseDouble(view.getCampoDimensao().getText());
-            double area = Double.parseDouble(view.getCampoArea().getText());
+            double area = calcularArea(forma, valor); // valida o valor!
 
             Sabor sabor1 = (Sabor) view.getComboSabor1().getSelectedItem();
             Sabor sabor2 = (Sabor) view.getComboSabor2().getSelectedItem();
 
-            if (sabor1 == null || sabor2 == null) throw new Exception("Selecione dois sabores.");
+            if (sabor1 == null || sabor2 == null)
+                throw new Exception("Selecione dois sabores.");
 
             List<Sabor> sabores = new ArrayList<>();
             sabores.add(sabor1);
@@ -135,7 +150,7 @@ public class AdicionarPizzaController {
             view.dispose();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(view, "Erro ao confirmar pizza: " + e.getMessage());
+            JOptionPane.showMessageDialog(view, "Erro ao confirmar pizza: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -146,5 +161,17 @@ public class AdicionarPizzaController {
             case "premium" -> precoPremium;
             default -> precoSimples;
         };
+    }
+
+    private void preencherCamposEdicao(Pizza pizza) {
+        String tipoForma = pizza.getForma().getClass().getSimpleName().toLowerCase();
+        view.getComboForma().setSelectedItem(Character.toUpperCase(tipoForma.charAt(0)) + tipoForma.substring(1));
+        view.getCampoDimensao().setText(String.format("%.2f", pizza.getForma().getDimensao()));
+        view.getCampoArea().setText(String.format("%.2f", pizza.getForma().calcularArea()));
+        view.getLblPrecoPizza().setText(String.format("Preço: R$ %.2f", pizza.getPreco()));
+
+        List<Sabor> sabores = pizza.getSabores();
+        if (!sabores.isEmpty()) view.getComboSabor1().setSelectedItem(sabores.get(0));
+        if (sabores.size() > 1) view.getComboSabor2().setSelectedItem(sabores.get(1));
     }
 }
