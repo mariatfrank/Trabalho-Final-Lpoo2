@@ -30,9 +30,9 @@ public class AdicionarPizzaDialog extends JDialog {
         setSize(400, 430);
         setLocationRelativeTo(parent);
 
-        initComponents(); // cria os componentes visuais
+        initComponents();
         controller = new AdicionarPizzaController(this, precoSimples, precoEspecial, precoPremium, pizzaExistente); // instancia o controller
-        registrarEventos(); // registra eventos após o controller estar pronto
+        registrarEventos();
     }
 
     private void initComponents() {
