@@ -44,7 +44,7 @@ public class SaborDAO {
 
     public List<Sabor> listarTodos() {
         List<Sabor> lista = new ArrayList<>();
-        String sql = "SELECT id, nome, tipo FROM sabor"; // tipo precisa estar presente
+        String sql = "SELECT id, nome, tipo FROM sabor";
 
         try (Connection conn = Conexao.getConexao();
              Statement stmt = conn.createStatement();

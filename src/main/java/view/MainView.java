@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class MainView extends JFrame {
     public MainView() {
-        setTitle("Tela Principal");
+        setTitle("Tela Principal - Pizzaria");
         setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

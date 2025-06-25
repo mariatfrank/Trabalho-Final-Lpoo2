@@ -24,7 +24,6 @@ public class PedidoDAO {
                     PreparedStatement stmtPizza = conn.prepareStatement(sqlPizza, Statement.RETURN_GENERATED_KEYS);
                     PreparedStatement stmtPizzaSabor = conn.prepareStatement(sqlPizzaSabor)
             ) {
-                // Inserir o pedido
                 stmtPedido.setInt(1, pedido.getCliente().getId());
                 stmtPedido.setDouble(2, pedido.getPrecoTotal());
                 stmtPedido.setString(3, pedido.getEstado());
@@ -35,7 +34,6 @@ public class PedidoDAO {
                     pedido.setId(rsPedido.getInt(1));
                 }
 
-                // Inserir pizzas
                 for (Pizza pizza : pedido.getPizzas()) {
                     stmtPizza.setInt(1, pedido.getId());
                     stmtPizza.setString(2, pizza.getForma().getClass().getSimpleName());

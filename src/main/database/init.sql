@@ -1,4 +1,3 @@
--- Criação das tabelas
 
 CREATE TABLE Cliente (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,16 +35,8 @@ CREATE TABLE Pizza_Sabor (
     FOREIGN KEY(sabor_id) REFERENCES Sabor(id)
 );
 
--- Inserir clientes de exemplo
 
-INSERT INTO Cliente (nome, telefone) VALUES ('João Silva', '9999-9999');
-INSERT INTO Cliente (nome, telefone) VALUES ('Maria Oliveira', '8888-8888');
-INSERT INTO Cliente (nome, telefone) VALUES ('Carlos Santos', '7777-7777');
 
--- Inserir sabores de exemplo
 
-INSERT INTO Sabor (nome) VALUES ('Calabresa');
-INSERT INTO Sabor (nome) VALUES ('Mussarela');
-INSERT INTO Sabor (nome) VALUES ('Portuguesa');
-INSERT INTO Sabor (nome) VALUES ('Frango com Catupiry');
-INSERT INTO Sabor (nome) VALUES ('Chocolate');
+
+
